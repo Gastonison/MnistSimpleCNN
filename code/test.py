@@ -13,7 +13,8 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from PIL import Image
 from ema import EMA
-from datasets import MnistDataset
+datasets.DatasetFolder.__init__ = lambda self, root, transform=None, target_transform=None, loader=None: self.__init__(root, transform, target_transform, loader)
+from datasets import ImageFolder
 from transforms import RandomRotation
 from models.modelM3 import ModelM3
 from models.modelM5 import ModelM5
@@ -26,10 +27,11 @@ def run(p_seed=0, p_kernel_size=5, p_logdir="temp"):
     device = torch.device("cuda" if use_cuda else "cpu")
     if use_cuda == False:
         print("WARNING: CPU will be used for training.")
-        exit(0)
+        
 
     # data loader -----------------------------------------------------------------#
-    test_dataset = MnistDataset(training=False, transform=None)
+
+    test_dataset = ImageFolder(root='../data/omega/', transform=None)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False)
 
     # model selection -------------------------------------------------------------#

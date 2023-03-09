@@ -2,6 +2,39 @@ import torch
 import numpy as np
 from PIL import Image
 from torchvision import transforms
+import os
+
+class OmegaDataset(torch.utils.data.Dataset):
+    def __init__(self, transform=None):
+        self.transform = transform
+        self.data = []
+        self.labels = []
+        self.load_data()
+    
+    def load_data(self):
+        for dir in next(os.walk(f'../data/omega'))[1]:
+            print(dir)
+            for file in os.listdir(f'../data/omega/{dir}'):
+                if file == ".DS_Store":
+                    continue
+                img = Image.open(f'../data/omega/{dir}/{file}')
+                img = img.convert('RGB')
+                # img = img / 255.0
+                # img = np.reshape(img, (-1, 28, 28, 1)).astype(np.float32)
+                self.data.append(np.array(img))
+                self.labels.append(dir)
+
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        img = self.data[idx]
+        label = self.labels[idx]
+        if self.transform:
+            img = self.transform(img)
+        return img, label
+
+
 
 class MnistDataset(torch.utils.data.Dataset):
     def __init__(self, training=True, transform=None):

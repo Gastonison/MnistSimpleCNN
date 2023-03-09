@@ -25,8 +25,8 @@ class ModelM3(nn.Module):
         self.conv9_bn = nn.BatchNorm2d(160)
         self.conv10 = nn.Conv2d(160, 176, 3, bias=False)   # output becomes 8x8
         self.conv10_bn = nn.BatchNorm2d(176)
-        self.fc1 = nn.Linear(11264, 10, bias=False)
-        self.fc1_bn = nn.BatchNorm1d(10)
+        self.fc1 = nn.Linear(11264, 88, bias=False)
+        self.fc1_bn = nn.BatchNorm1d(88)
     def get_logits(self, x):
         x = (x - 0.5) * 2.0
         conv1 = F.relu(self.conv1_bn(self.conv1(x)))
